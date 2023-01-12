@@ -1,0 +1,11 @@
+program: train.py
+method: bayes
+metric:
+  name: f1_score
+  goal: maximize
+parameters:
+  num_train_epochs:
+    values: [5, 10, 15, 20]
+  learning_rate:
+    min: 0.000001
+    max: 0.00004
