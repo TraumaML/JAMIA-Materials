@@ -85,8 +85,6 @@ def expression_to_regex(expression: str) -> str:
 
     expr_list= expression.split()
 
-    # Turn ORs into single word  ---> Only handles one OR per statement. I could fix it but I have a lot of other things to do right now, sorry
-    # i feel bad so if you really want it fixed and can't do it yourself, shoot me an email batwood@skiff.com
     if "or" in expr_list:
         index = expr_list.index("or")
         post, prior = expr_list.pop(index+1), expr_list.pop(index-1)
@@ -190,7 +188,6 @@ def main(dir_path: Path, symptom_regex_path: Path, event_regex_path: Path, subst
 
             yield file_path, regexes
 
-    # if you're able to see that this multiprocessing is totally unnecessary then you're able to remove it too lol 
     Pool().starmap(annotate, work_generator(), chunksize=100)
     
 

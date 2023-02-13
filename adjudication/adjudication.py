@@ -1,9 +1,6 @@
 """
 author: Bruce Atwood
 
-date: 25 May 2022
-
-
 This script is used for merging two BRAT annotation .ann files (referent to same .txt file) into one single one.
 
 Entities that are wholly concordant are green as usual (the default in our BRAT .config file)
@@ -335,18 +332,46 @@ def adjudicate(ann_file1: list, ann_file2: list) -> list:
 @click.argument('dir_path', type=click.Path(exists=True), required=True)
 def main(dir_path):
     """
-    dir_path is path to folder called EHR
+    dir_path is path to folder, with following structure (files created by this program in quotations):
+
+    -dir_path
+        -"adjudicated"
+            -"file1.txt"
+            -"file1.ann"
+        -annotators
+            -Ann
+                -file1.txt
+                -file1.ann
+                -...
+            -Mei
+                -file1.txt
+                -file1.ann
+                -...
+            -Phil
+                -file2.txt
+                -file2.ann
+                -...
+            -"combined"
+                -"file1.txt"
+                -"file1.txt"
+                -"file1.ann"
+                -"file1.ann"
+                -"file2.txt"
+                -"file2.txt"
+    list of subdirectories in annotators will need to be updated for project requirements
+
     """
     dir_path = Path(dir_path)
 
-    adjudicated = dir_path / "readjudicated"
+    adjudicated = dir_path / "adjudicated"
     if not adjudicated.exists():
         os.mkdir(adjudicated)
 
+    annotators = ["Mei","Ann","Phil"] # UPDATE THIS!
 
     combined = []
-    for annotator in ["Mei","Ann","Phil"]:
-        combined += (dir_path/annotator).glob("*.ann")
+    for annotator in annotators:
+        combined += (dir_path/"annotators"/annotator).glob("*.ann")
 
     for index, file in enumerate(combined):
 
